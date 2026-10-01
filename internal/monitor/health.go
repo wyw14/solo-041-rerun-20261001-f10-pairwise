@@ -9,7 +9,7 @@ import (
 type HealthSource interface {
 	Healthy() bool
 	Lines() []model.LineState
-	Alarms() []model.Alarm
+	Alarms(model.EpisodeStatus) []model.AlarmEpisode
 }
 
 type Health struct {
@@ -29,10 +29,10 @@ func NewService(source HealthSource, now func() time.Time) *Service {
 }
 
 func (s *Service) Observe() Health {
-	alarms := s.source.Alarms()
+	episodes := s.source.Alarms(model.EpisodeAll)
 	active := 0
-	for _, alarm := range alarms {
-		if alarm.Active() {
+	for _, episode := range episodes {
+		if episode.Active() {
 			active++
 		}
 	}

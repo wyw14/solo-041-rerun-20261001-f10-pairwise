@@ -64,8 +64,8 @@ func (p *Plant) AdvanceSettling(lineID model.LineID) (settling.Cycle, error) {
 	return p.cycles.Advance(lineID, p.now())
 }
 
-func (p *Plant) Alarms() []model.Alarm {
-	return p.alarms.All()
+func (p *Plant) Alarms(filter model.EpisodeStatus) []model.AlarmEpisode {
+	return p.alarms.List(filter)
 }
 
 func (p *Plant) StatusBlowers() []aeration.Blower {
@@ -76,11 +76,15 @@ func (p *Plant) StatusAerationWindows() []aeration.Window {
 	return p.aeration.Windows()
 }
 
-func (p *Plant) AcknowledgeAlarm(id uuid.UUID) (model.Alarm, error) {
-	return p.alarms.Acknowledge(id)
+func (p *Plant) AcknowledgeAlarm(id uuid.UUID, confirmer, note string) (model.AlarmEpisode, error) {
+	return p.alarms.Acknowledge(id, confirmer, note, p.now())
 }
 
-func (p *Plant) RecoverAlarm(id uuid.UUID) (model.Alarm, error) {
+func (p *Plant) HandleAlarm(id uuid.UUID, note string) (model.AlarmEpisode, error) {
+	return p.alarms.Handle(id, note, p.now())
+}
+
+func (p *Plant) RecoverAlarm(id uuid.UUID) (model.AlarmEpisode, error) {
 	return p.alarms.Recover(id, p.now())
 }
 
