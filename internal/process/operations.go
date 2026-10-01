@@ -68,6 +68,10 @@ func (p *Plant) Alarms() []model.Alarm {
 	return p.alarms.All()
 }
 
+func (p *Plant) AlarmEpisodes(status string) ([]model.Episode, error) {
+	return p.alarms.Episodes(status)
+}
+
 func (p *Plant) StatusBlowers() []aeration.Blower {
 	return p.aeration.Blowers()
 }
@@ -76,11 +80,11 @@ func (p *Plant) StatusAerationWindows() []aeration.Window {
 	return p.aeration.Windows()
 }
 
-func (p *Plant) AcknowledgeAlarm(id uuid.UUID) (model.Alarm, error) {
-	return p.alarms.Acknowledge(id)
+func (p *Plant) AcknowledgeAlarm(id uuid.UUID, operator, note string) (model.Episode, error) {
+	return p.alarms.Acknowledge(id, operator, note, p.now())
 }
 
-func (p *Plant) RecoverAlarm(id uuid.UUID) (model.Alarm, error) {
+func (p *Plant) RecoverAlarm(id uuid.UUID) (model.Episode, error) {
 	return p.alarms.Recover(id, p.now())
 }
 

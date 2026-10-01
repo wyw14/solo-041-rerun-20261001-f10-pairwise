@@ -63,6 +63,7 @@ func (s *Server) routes() http.Handler {
 		api.Post("/settling/{lineID}/cycles", s.beginSettling)
 		api.Post("/settling/{lineID}/cycles/advance", s.advanceSettling)
 		api.Get("/alarms", s.alarmList)
+		api.Get("/alarms/timeline", s.alarmTimeline)
 		api.Post("/alarms/{alarmID}/ack", s.acknowledgeAlarm)
 		api.Post("/alarms/{alarmID}/recover", s.recoverAlarm)
 		api.Post("/samples", s.receiveSample)
